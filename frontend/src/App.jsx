@@ -594,6 +594,7 @@ function SettingsPage() {
 // ── App ───────────────────────────────────────────────────────────────────────
 function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { vehicles, positions, loading, error, lastFetched, loadData } = useFleetData();
 
   const [commandSupport, setCommandSupport] = useState({});
@@ -668,8 +669,14 @@ function App() {
 
   return (
     <div className="app">
+      {/* Mobile overlay */}
+      <div
+        className={`sidebar-overlay ${sidebarOpen ? "visible" : ""}`}
+        onClick={() => setSidebarOpen(false)}
+      />
+
       {/* ── Sidebar ── */}
-      <aside className="sidebar">
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="brand">
           <span className="brand-mark">VC</span>
           <span className="brand-name">VoltCred Fleet</span>
@@ -680,7 +687,7 @@ function App() {
               <li key={item.key}>
                 <button
                   className={`nav-item ${activeTab === item.key ? "nav-item-active" : ""}`}
-                  onClick={() => setActiveTab(item.key)}>
+                  onClick={() => { setActiveTab(item.key); setSidebarOpen(false); }}>
                   <Icon name={item.icon} />
                   <span>{item.label}</span>
                 </button>
@@ -697,6 +704,12 @@ function App() {
       {/* ── Main ── */}
       <main className="content">
         <div className="topbar">
+          {/* Hamburger — mobile only */}
+          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label="Toggle menu">
+            <div className={`hamburger ${sidebarOpen ? "open" : ""}`}>
+              <span /><span /><span />
+            </div>
+          </button>
           <h1>{titleMap[activeTab]}</h1>
           <div className="status-row">
             {lastFetched && (
