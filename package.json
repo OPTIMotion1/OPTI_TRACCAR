@@ -1,6 +1,9 @@
 {
   "name": "voltcred-fleet",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "build": "npm install --prefix frontend && npm run build --prefix frontend",
     "start": "npm install --prefix backend && node backend/src/app.js",
