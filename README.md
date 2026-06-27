@@ -11,43 +11,44 @@ A real-time fleet management dashboard for tracking and controlling vehicles via
 - **Live Dashboard** — vehicle count, online/offline status, live GPS count
 - **Real-time Map** — positions auto-refresh every 10 seconds using Leaflet + OpenStreetMap
 - **Vehicle Table** — searchable, with per-row status indicators and stale position warnings
-- **Remote Commands** — send engine lock / unlock commands to vehicles (allow-listed: `engineStop`, `engineResume`)
-- **Trips** — historical trip data with start/end times, distance, speed, and route map with polyline
-- **Reports** — summary report with total distance, drive time, engine hours, and top speed aggregation
-- **Settings** — configurable poll interval and stale threshold (persisted to localStorage)
+- **Remote Commands** — send engine lock / unlock commands to vehicles
+- **Trips** — historical trip data with start/end times, distance, speed, and route map
+- **Reports** — summary report with total distance, drive time, engine hours, top speed
+- **Settings** — configurable preferences panel
 
 ---
 
 ## Tech Stack
 
-| Layer     | Tech                          |
+| Layer     | Technology                    |
 |-----------|-------------------------------|
 | Frontend  | React 19, Vite, React-Leaflet |
 | Backend   | Node.js, Express 5            |
-| Tracking  | Traccar (app.voltcred.com)    |
+| Tracking  | Traccar (app.optimotion.in)   |
 | Map       | Leaflet + OpenStreetMap       |
+| Hosting   | Railway                       |
 
 ---
 
 ## Project Structure
 
 ```
-voltcred-fleet/
+opti-traccar/
 ├── backend/
 │   ├── src/
-│   │   ├── app.js                  # Express entry point
+│   │   ├── app.js
 │   │   ├── routes/
-│   │   │   ├── vehicle.routes.js   # GET /api/vehicles
-│   │   │   ├── position.routes.js  # GET /api/positions
-│   │   │   ├── command.routes.js   # GET/POST /api/vehicles/:id/command(s)
-│   │   │   └── reports.routes.js   # GET /api/reports/trips|summary|route
+│   │   │   ├── vehicle.routes.js
+│   │   │   ├── position.routes.js
+│   │   │   ├── command.routes.js
+│   │   │   └── reports.routes.js
 │   │   └── services/
-│   │       └── traccar.service.js  # Traccar API auth + requests
-│   └── .env                        # ← NOT committed (see below)
+│   │       └── traccar.service.js
+│   └── .env                        ← NOT committed
 └── frontend/
     └── src/
-        ├── App.jsx                 # All UI components + logic
-        └── App.css                 # Design system styles
+        ├── App.jsx
+        └── App.css
 ```
 
 ---
@@ -57,13 +58,13 @@ voltcred-fleet/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/voltcred-fleet.git
+git clone https://github.com/OPTIMotion1/voltcred-fleet.git
 cd voltcred-fleet
 ```
 
 ### 2. Configure the backend
 
-Create `backend/.env` — **never commit this file**:
+Create `backend/.env`:
 
 ```env
 PORT=5000
@@ -76,12 +77,8 @@ TRACCAR_PASSWORD=yourpassword
 ```bash
 cd backend
 npm install
-npm run dev      # uses nodemon for auto-reload
-# or
-npm start        # plain node
+npm run dev
 ```
-
-Backend runs on `http://localhost:5000`
 
 ### 4. Run the frontend
 
@@ -91,33 +88,28 @@ npm install
 npm run dev
 ```
 
-Frontend runs on `http://localhost:5173` — open this in your browser.
-
-Both must be running simultaneously.
+Open `http://localhost:5173` in your browser.
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint                          | Description                        |
-|--------|-----------------------------------|------------------------------------|
-| GET    | `/api/vehicles`                   | All vehicles from Traccar          |
-| GET    | `/api/positions`                  | Current positions of all devices   |
-| GET    | `/api/vehicles/:id/commands`      | Supported commands for a device    |
-| POST   | `/api/vehicles/:id/command`       | Send `engineStop` or `engineResume`|
-| GET    | `/api/reports/trips`              | Trip history for a device          |
-| GET    | `/api/reports/summary`            | Summary report for a device        |
-| GET    | `/api/reports/route`              | Raw GPS route points for a period  |
-
-Report endpoints require `?deviceId=&from=&to=` (ISO 8601 timestamps).
+| Method | Endpoint                        | Description                      |
+|--------|---------------------------------|----------------------------------|
+| GET    | `/api/vehicles`                 | All vehicles from Traccar        |
+| GET    | `/api/positions`                | Current positions of all devices |
+| GET    | `/api/vehicles/:id/commands`    | Supported commands for a device  |
+| POST   | `/api/vehicles/:id/command`     | Send engineStop or engineResume  |
+| GET    | `/api/reports/trips`            | Trip history for a device        |
+| GET    | `/api/reports/summary`          | Summary report for a device      |
+| GET    | `/api/reports/route`            | GPS route points for a period    |
 
 ---
 
-## Security Notes
+## Security
 
-- `.env` is gitignored — never commit credentials
-- Commands are server-side allow-listed to only `engineStop` and `engineResume`
-- No arbitrary command types can reach a vehicle through this API
+- Credentials stored as encrypted environment variables — never in source code
+- Commands are server-side allow-listed to `engineStop` and `engineResume` only
 
 ---
 

@@ -565,7 +565,7 @@ function SettingsPage() {
               <div className="setting-label">Traccar host</div>
               <div className="setting-desc">Configured in backend .env</div>
             </div>
-            <input type="text" className="setting-input" defaultValue="app.voltcred.com" readOnly style={{ opacity: 0.7 }} />
+            <input type="text" className="setting-input" defaultValue="app.optimotion.in" readOnly style={{ opacity: 0.7 }} />
           </div>
         </div>
 
@@ -575,7 +575,7 @@ function SettingsPage() {
             <div className="about-row"><span>App</span><span>OPTI Traccar</span></div>
             <div className="about-row"><span>Frontend</span><span>React + Vite</span></div>
             <div className="about-row"><span>Backend</span><span>Node.js / Express</span></div>
-            <div className="about-row"><span>Tracking</span><span>Traccar (app.voltcred.com)</span></div>
+            <div className="about-row"><span>Tracking</span><span>Traccar (app.optimotion.in)</span></div>
             <div className="about-row"><span>Map</span><span>Leaflet + OpenStreetMap</span></div>
           </div>
         </div>
